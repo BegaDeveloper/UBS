@@ -1,0 +1,45 @@
+<form [formGroup]="loanForm" autocomplete="off" (ngSubmit)="onSubmit()">
+    <div class="back-div">
+        <button type="button" class="back-btn d-flex" (mousedown)="$event.preventDefault()" (click)="goBack()">
+            <span class="material-symbols-outlined">arrow_back</span>
+            <span>&nbsp;&nbsp;Nazad</span>
+        </button>
+    </div>
+    <div class="id-div">
+        <p>{{ title }}</p>
+    </div>
+    <div class="form-div">
+        <div class="field-wrapper">
+            <mat-label class="label-txt">Kod*</mat-label>
+            <mat-form-field appearance="outline">
+                <input formControlName="code" matInput name="code" />
+            </mat-form-field>
+            <mat-error *ngIf="showValidationMessage('code')">
+                <strong>{{ 'required' | translate }}</strong>
+            </mat-error>
+        </div>
+        <div class="field-wrapper">
+            <mat-label class="label-txt">Kategorija*</mat-label>
+            <mat-form-field appearance="outline" class="inpt-width">
+                <mat-select formControlName="categoryType" placeholder="Odaberi tip" panelClass="select-top" disableOptionCentering>
+                    <mat-option *ngFor="let t of catTypes" [value]="t.code"> {{ t.name }} </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-error *ngIf="showValidationMessage('type')">
+                <strong>{{ 'required' | translate }}</strong>
+            </mat-error>
+        </div>
+        <div class="field-wrapper">
+            <mat-label class="label-txt">Ime*</mat-label>
+            <mat-form-field class="example-full-width inpt-width" appearance="outline">
+                <input formControlName="name" matInput name="name" />
+            </mat-form-field>
+            <mat-error *ngIf="showValidationMessage('name')">
+                <strong>{{ 'required' | translate }}</strong>
+            </mat-error>
+        </div>
+        <div class="btn-wrapper">
+            <button type="submit" class="btn btn-primary">Snimi</button>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,48 @@
+.select-statuses-wrapper {
+    display: flex;
+    justify-content: space-around;
+    border-bottom: 2px solid #1D4385;
+}
+
+.select-statuses {
+    margin: 5px 17px;
+}
+
+.select-statuses ::ng-deep label {
+    font-size: 16px;
+}
+
+::ng-deep .mat-select-panel {
+    position: absolute;
+    top: 40px;
+    left: 30px;
+    min-width: fit-content !important;
+}
+
+::ng-deep.mat-row {
+    &.critical-row {
+        background-color: #ffebee;
+        .mat-cell {
+            color: #c62828;
+        }
+    }
+    &.warning-row {
+        background-color: #fff8e1;
+    }
+    &.refinance-row:hover {
+        background-color: #f9f9f9;
+    }
+
+}
+
+::ng-deep.mat-cell .material-icons {
+    &.info {
+        color: #1565c0;
+    }
+    &.warning {
+        color: #ff8f00;
+    }
+    &.critical {
+        color: #c62828;
+    }
+}

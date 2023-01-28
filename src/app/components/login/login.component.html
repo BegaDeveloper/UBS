@@ -1,0 +1,52 @@
+
+<div class="login-wrapper">
+    <form #authForm="ngForm" (ngSubmit)="onSubmit()" class="login-form p-5">
+        <h1 *ngIf="isTestingEnvironment" class="testEnvironmentLogin">Testno Okruženje</h1>
+        <div class="login-logo mx-auto">
+            <img src="/assets/svg/logo.svg" alt="logo" class="img-fluid">
+        </div>
+        <div class="field-wrapper">
+            <mat-label>Email</mat-label>
+            <mat-form-field appearance="outline">
+                <input
+                    matInput
+                    type="email"
+                    placeholder="Email"
+                    name="email"
+                    ngModel
+                    required
+                />
+            </mat-form-field>
+            <mat-error *ngIf="showValidationMessage('email')">
+                <strong>{{ 'required' | translate }}</strong>
+            </mat-error>
+        </div>
+        <div class="field-wrapper">
+            <mat-label>Lozinka</mat-label>
+            <mat-form-field appearance="outline">
+                <input
+                    matInput
+                    [type]="isPasswordVisible ? 'text' : 'password'"
+                    placeholder="Lozinka"
+                    name="password"
+                    ngModel
+                    required
+                />
+                <mat-icon matSuffix class="material-symbols-outlined pointer" (mousedown)="$event.preventDefault()" (click)="togglePasswordVisibility()">
+                    {{ isPasswordVisible ? 'visibility' : 'visibility_off' }}
+                </mat-icon>
+            </mat-form-field>
+            <mat-error *ngIf="showValidationMessage('password')">
+                <strong>{{ 'required' | translate }}</strong>
+            </mat-error>
+        </div>
+        <div class="btn-wrapper">
+            <button type="submit" class="btn btn-primary mt-4 login-btn">
+                Prijavi se
+            </button>
+            <p class="forgot-pass mt-4" [routerLink]="['/forgot-password']">
+                <a>Zaboravljena lozinka</a>
+            </p>
+        </div>
+    </form>
+</div>

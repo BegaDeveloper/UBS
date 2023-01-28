@@ -1,0 +1,200 @@
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use '@angular/material' as mat;
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+
+// Typography
+$custom-typography: mat.define-typography-config(
+    $font-family: "'Fira Sans', sans-serif",
+);
+
+@include mat.core($custom-typography);
+$fa-font-path: '../../../node_modules/font-awesome/fonts';
+@import '~font-awesome/scss/font-awesome.scss';
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: 'Fira Sans', sans-serif;
+    background-color: #f8f8f8;
+    padding-top: 56px; //navbar height
+    font-size: 14px;
+}
+
+.select-top {
+    margin-top: 30px !important;
+}
+
+.user-pos {
+    position: absolute !important;
+    top: 30px !important;
+    left: 5px !important;
+}
+
+.loan-mtop {
+    position: absolute !important;
+    top: 30px !important;
+    left: 0 !important;
+}
+
+.field-wrapper {
+    margin-bottom: 15px;
+}
+
+label {
+    font-size: 13px;
+}
+
+.label-txt {
+    display: block;
+    font-size: small;
+    color: #666;
+}
+
+.flex {
+    display: flex;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.paginator {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.main-title {
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.mat-paginator {
+    box-shadow: 0px 5px 5px -3px rgb(0 0 0 / 20%), 0px 8px 10px 1px rgb(0 0 0 / 14%), 0px 3px 14px 2px rgb(0 0 0 / 12%);
+}
+
+.search {
+    position: relative;
+}
+
+.back-div {
+    margin-bottom: 1rem;
+}
+
+.back-btn {
+    background-color: transparent;
+    border: 1px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #323232;
+    padding: 0;
+}
+
+.id-div p {
+    font-size: 24px;
+    font-weight: 600;
+    margin: 10px 0 0 0;
+}
+
+.btn-border-red {
+    background: #fff;
+    color: red;
+    border-color: red !important;
+}
+
+.btn-border-blue {
+    background: #fff;
+    color: #0084ff;
+    border-color: #0084ff !important;
+}
+
+.btn-regular-red {
+    background: red;
+    color: #fff;
+}
+
+.btn-regular-blue {
+    background: #0084ff;
+    color: #fff;
+}
+
+/*Modal*/
+.modal-footer {
+    justify-content: space-between;
+    border-top: none;
+}
+
+.modal-header {
+    border-bottom: none;
+}
+
+.modal-body {
+    padding-bottom: 50px;
+}
+
+.modal-content {
+    margin-top: 200px;
+    padding: 0 15px 0 15px;
+}
+
+.align {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.align p {
+    margin: 0 0 0 10px;
+    color: #fff;
+}
+
+.max-width {
+    width: 100% !important;
+}
+
+.mat-error {
+    font-size: 14px;
+    margin: 3px 0 0 5px;
+}
+
+.mat-form-field-wrapper {
+    padding-bottom: 0;
+    background-color: #fff;
+}
+.mat-form-field-appearance-outline .mat-select-arrow-wrapper {
+    transform: translateY(0) !important;
+}
+.mat-form-field-appearance-outline .mat-form-field-suffix {
+    top: 0.35em !important;
+}
+.mat-form-field-appearance-outline .mat-form-field-infix {
+    padding: 0.25em 0 0.75em 0;
+}
+mat-form-field.mat-form-field {
+    font-size: 14px;
+}
+
+//global
+.pointer {
+    cursor: pointer;
+}
+
+.testEnvironment {
+    color: white;
+}
+
+.testEnvironmentLogin {
+    color: #1d4283;
+    text-align: center;
+}

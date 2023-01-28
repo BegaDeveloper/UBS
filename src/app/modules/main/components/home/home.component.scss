@@ -1,0 +1,31 @@
+.hamburger {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.side {
+    width: 200px;
+    background-color: #fff;
+    border-right: 1px solid #ddd;
+    position: fixed;
+    top: 56px;
+    left: 0;
+    right: auto;
+    bottom: 0;
+    z-index: 1000;
+}
+
+.router {
+    margin-left: 200px;
+    transition: margin-left 100ms ease-in-out;
+}
+.router.full {
+    margin-left: 0;
+}

@@ -1,0 +1,649 @@
+<div *ngIf="currentUser?.bank?.name">
+    <form [formGroup]="refinanceForm" autocomplete="off" (keydown.enter)="$event.preventDefault()">
+        <div class="container-fluid">
+            <div class="back-div">
+                <button type="button" class="back-btn d-flex" (mousedown)="$event.preventDefault()" (click)="goBack()">
+                    <span class="material-symbols-outlined">arrow_back</span>
+                    <span>&nbsp;&nbsp;Nazad</span>
+                </button>
+            </div>
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <div *ngIf="!id" class="header-div">
+                        <h3>Novi zahtev</h3>
+                    </div>
+                    <div *ngIf="id" class="header-div">
+                        <h3>#{{ refloanId }} - {{ debtroName }}</h3>
+                    </div>
+                </div>
+                <div>
+                    <div class="additional-info-div">
+                        <div
+                            class="date-info"
+                            *ngIf="refinanceRequst?.nextActionDate"
+                            [ngClass]="refinanceRequst.nextActionDate | nextActionDateStatus"
+                        >
+                            {{ refinanceRequst?.nextActionDate | date: 'dd.MM.yyyy.' }}
+                            <span class="separator">|</span>
+                            {{ refinanceRequst?.nextActionDate | date: 'HH:mm' }}
+                        </div>
+                        <div class="status-info mat-elevation-z1" *ngIf="refinanceRequst?.refStatus?.code">
+                            <span class="label">Status: </span>
+                            <span class="value">{{ refinanceRequst?.refStatus?.name }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row g-3">
+                <div class="col-lg-8">
+                    <div>
+                        <mat-expansion-panel expanded="true" togglePosition="before">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title> Osnovni podaci </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <div class="row g-3">
+                                <div class="col-xl-3 col-lg-12">
+                                    <div class="mb-2">
+                                        <mat-label class="label-txt">Tip korisnika*</mat-label>
+                                        <mat-form-field appearance="outline" class="search">
+                                            <mat-select
+                                                formControlName="debtorType"
+                                                placeholder="Odaberi korisnika"
+                                                (selectionChange)="setJmbgMbValidator()"
+                                                panelClass="user-pos"
+                                                disableOptionCentering
+                                            >
+                                                <mat-option *ngFor="let debtorType of debtorTypes" [value]="debtorType.code">
+                                                    {{ debtorType.name }}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                        <mat-error *ngIf="showLoanValidationMessage('debtorType')">
+                                            <strong>{{ 'required' | translate }}</strong>
+                                        </mat-error>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-lg-12">
+                                    <div class="mb-2">
+                                        <mat-label class="label-txt">Ime i prezime / Naziv pravnog lica*</mat-label>
+                                        <mat-form-field class="example-full-width" appearance="outline">
+                                            <input formControlName="debtorName" matInput name="debtorName" />
+                                        </mat-form-field>
+                                        <mat-error *ngIf="showLoanValidationMessage('debtorName')">
+                                            <strong>{{ 'required' | translate }}</strong>
+                                        </mat-error>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-lg-12">
+                                    <div class="mb-2">
+                                        <mat-label class="label-txt">JBMG ili MB*</mat-label>
+                                        <mat-form-field appearance="outline">
+                                            <input
+                                                formControlName="debtorId"
+                                                matInput
+                                                name="debtorId"
+                                                (input)="allowOnlyDigits(-1, 'debtorId')"
+                                                (blur)="setJmbgMbValidator()"
+                                            />
+                                        </mat-form-field>
+                                        <mat-error *ngIf="refinanceForm.controls['debtorId'].errors?.['jmbgInvalid']; else jmbgError">
+                                            <strong>{{ validationMessageJmbg | translate }}</strong>
+                                        </mat-error>
+                                        <ng-template #jmbgError>
+                                            <mat-error *ngIf="showLoanValidationMessage('debtorId')">
+                                                <strong>{{ 'required' | translate }}</strong>
+                                            </mat-error>
+                                        </ng-template>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-xl-6 col-lg-12">
+                                    <div class="mb-2">
+                                        <mat-label class="label-txt">Prethodna banka</mat-label>
+                                        <mat-form-field class="example-full-width" appearance="outline" (click)="autofocusOnSearchInput()">
+                                            <mat-select
+                                                formControlName="prevBankId"
+                                                placeholder="Odaberi banku"
+                                                panelClass="loan-mtop"
+                                                disableOptionCentering
+                                            >
+                                                <div class="search-select">
+                                                    <input
+                                                        type="text"
+                                                        matInput
+                                                        placeholder="Pretraži banke"
+                                                        [(ngModel)]="searchBank"
+                                                        [ngModelOptions]="{ standalone: true }"
+                                                        (keydown)="$event.stopPropagation()"
+                                                        #searchInput
+                                                    />
+                                                </div>
+                                                <mat-option
+                                                    *ngFor="let bank of previousBanks"
+                                                    [value]="bank.id"
+                                                    [ngStyle]="{
+                                                        display:
+                                                            bank.name.toLowerCase().includes(searchBank.toLowerCase()) ||
+                                                            bank.code.toLowerCase().includes(searchBank.toLowerCase())
+                                                                ? 'flex'
+                                                                : 'none'
+                                                    }"
+                                                >
+                                                    {{ bank.name + ' ' + '(' + bank.code + ')' }}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                        <mat-error *ngIf="showLoanValidationMessage('prevBankId')">
+                                            <strong>{{ 'required' | translate }}</strong>
+                                        </mat-error>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-lg-12">
+                                    <div class="mb-2">
+                                        <mat-label class="label-txt">Nova banka</mat-label>
+                                        <mat-form-field class="example-full-width" appearance="outline">
+                                            <mat-select formControlName="newBankId" placeholder="Odaberi banku">
+                                                <mat-option *ngFor="let bank of banks" [value]="bank.id" readonly>
+                                                    {{ bank.name }}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+                        </mat-expansion-panel>
+                        <div formArrayName="refRequestLoans">
+                            <mat-expansion-panel
+                                expanded="true"
+                                *ngFor="let addLoan of refRequestLoans().controls; let i = index"
+                                [formGroupName]="i"
+                                togglePosition="before"
+                            >
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>Kreditni proizvod</mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <div class="delete-div flex justify-content-end">
+                                    <button mat-icon-button *ngIf="isDownloadVisible">
+                                        <span class="material-symbols-outlined" download (click)="downLoadDebtInfoDocument(i)"
+                                            >download</span
+                                        >
+                                    </button>
+                                    <button mat-icon-button *ngIf="isUserBank && isStatusDraft && refRequestLoans().length > 1">
+                                        <span class="material-symbols-outlined" (click)="removeLoan(i)">delete</span>
+                                    </button>
+                                </div>
+                                <div class="row g-3">
+                                    <div class="col-xl-3 col-lg-12">
+                                        <div class="mb-2">
+                                            <mat-label class="label-txt">Vrsta kreditnog proizvoda</mat-label>
+                                            <mat-form-field appearance="outline" class="search">
+                                                <mat-select
+                                                    formControlName="loanTypeId"
+                                                    name="loanTypeId"
+                                                    placeholder="Odaberi vrstu kreditnog proizvoda"
+                                                    panelClass="loan-mtop"
+                                                    disableOptionCentering
+                                                >
+                                                    <mat-option *ngFor="let loanType of loanTypes" [value]="loanType?.id">
+                                                        {{ loanType?.name }}
+                                                    </mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                            <mat-error *ngIf="showLoanValidationMessage('loanTypeId', i)">
+                                                <strong>{{ 'required' | translate }}</strong>
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-3 col-lg-12">
+                                        <div class="mb-2">
+                                            <mat-label class="label-txt">Partija</mat-label>
+                                            <mat-form-field class="example-full-width" appearance="outline">
+                                                <input
+                                                    formControlName="externalId"
+                                                    name="externalId"
+                                                    matInput
+                                                    (change)="checkValidators(i)"
+                                                />
+                                            </mat-form-field>
+                                            <mat-error *ngIf="showLoanValidationMessage('externalId', i)">
+                                                <strong>{{ 'required' | translate }}</strong>
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-3 col-lg-12">
+                                        <div class="mb-2">
+                                            <mat-label class="label-txt">Datum kredita</mat-label>
+                                            <mat-form-field appearance="outline">
+                                                <input
+                                                    matInput
+                                                    formControlName="contractDate"
+                                                    [matDatepicker]="picker"
+                                                    (dateChange)="checkValidators(i)"
+                                                    placeholder="Unesi datum DD.MM.YYYY"
+                                                    digitOnly
+                                                />
+                                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                                <mat-datepicker #picker></mat-datepicker>
+                                            </mat-form-field>
+                                            <mat-error *ngIf="showLoanValidationMessage('contractDate', i)">
+                                                <strong>{{ 'required' | translate }}</strong>
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-3 col-lg-12">
+                                        <div class="mb-2">
+                                            <mat-label class="label-txt">Iznos (RSD)</mat-label>
+                                            <mat-form-field class="example-full-width align-right" appearance="outline">
+                                                <input
+                                                    formControlName="amount"
+                                                    matInput
+                                                    name="amount"
+                                                    (input)="allowOnlyDigitsAndDot(i, 'amount')"
+                                                    (blur)="formatAmount(i, 'amount')"
+                                                    (focus)="formatAmountAsNumber(i, 'amount', $event)"
+                                                    (change)="checkValidators(i)"
+                                                />
+                                            </mat-form-field>
+                                            <mat-error *ngIf="showLoanValidationMessage('amount', i)">
+                                                <strong>{{ 'required' | translate }}</strong>
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row g-3" *ngIf="showLoanData()">
+                                    <div class="col-3">
+                                        <div class="mb-2">
+                                            <mat-label class="label-txt">Ukupno stanje duga</mat-label>
+                                            <mat-form-field class="example-full-width align-right" appearance="outline">
+                                                <input
+                                                    formControlName="debtAmount"
+                                                    matInput
+                                                    name="debtAmount"
+                                                    (input)="allowOnlyDigitsAndDot(i, 'debtAmount')"
+                                                    (blur)="formatAmount(i, 'debtAmount'); calculateTotalAmount(i)"
+                                                    (focus)="formatAmountAsNumber(i, 'debtAmount', $event)"
+                                                />
+                                            </mat-form-field>
+                                            <mat-error *ngIf="showLoanValidationMessage('debtAmount', i)">
+                                                <strong>{{ 'required' | translate }}</strong>
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="mb-2">
+                                            <mat-label class="label-txt">Neamortizovani iznos naknade</mat-label>
+                                            <mat-form-field class="example-full-width align-right" appearance="outline">
+                                                <input
+                                                    formControlName="debtDecreaseAmount"
+                                                    matInput
+                                                    name="debtDecreaseAmount"
+                                                    (input)="allowOnlyDigitsAndDot(i, 'debtDecreaseAmount')"
+                                                    (blur)="formatAmount(i, 'debtDecreaseAmount'); calculateTotalAmount(i)"
+                                                    (focus)="formatAmountAsNumber(i, 'debtDecreaseAmount', $event)"
+                                                />
+                                            </mat-form-field>
+                                            <mat-error *ngIf="showLoanValidationMessage('debtDecreaseAmount', i)">
+                                                <strong>{{ 'required' | translate }}</strong>
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="mb-2">
+                                            <mat-label class="label-txt">Naknada za prevremenu otplatu</mat-label>
+                                            <mat-form-field class="example-full-width align-right" appearance="outline">
+                                                <input
+                                                    formControlName="debtFeeAmount"
+                                                    matInput
+                                                    name="debtFeeAmount"
+                                                    (input)="allowOnlyDigitsAndDot(i, 'debtFeeAmount')"
+                                                    (blur)="formatAmount(i, 'debtFeeAmount'); calculateTotalAmount(i)"
+                                                    (focus)="formatAmountAsNumber(i, 'debtFeeAmount', $event)"
+                                                />
+                                            </mat-form-field>
+                                            <mat-error *ngIf="showLoanValidationMessage('debtFeeAmount', i)">
+                                                <strong>{{ 'required' | translate }}</strong>
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="mb-2">
+                                            <mat-label class="label-txt">Ukupno</mat-label>
+                                            <mat-form-field class="example-full-width align-right" appearance="outline">
+                                                <input
+                                                    formControlName="debtTotalAmount"
+                                                    matInput
+                                                    name="debtTotalAmount"
+                                                    (input)="allowOnlyDigitsAndDot(i, 'debtTotalAmount')"
+                                                    (blur)="formatAmount(i, 'debtTotalAmount')"
+                                                    (focus)="formatAmountAsNumber(i, 'debtTotalAmount', $event)"
+                                                />
+                                            </mat-form-field>
+                                            <mat-error *ngIf="showLoanValidationMessage('debtTotalAmount', i)">
+                                                <strong>{{ 'required' | translate }}</strong>
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row g-3" *ngIf="showLoanData()">
+                                    <div class="col-3">
+                                        <div class="mb-2">
+                                            <mat-label class="label-txt">Umanjenje cene kredita</mat-label>
+                                            <mat-form-field class="example-full-width align-right" appearance="outline">
+                                                <input
+                                                    formControlName="debtTotalDecreaseAmount"
+                                                    matInput
+                                                    #debtDec
+                                                    name="debtTotalDecreaseAmount"
+                                                    (input)="allowOnlyDigitsAndDotForDescreasedAmount(i, 'debtTotalDecreaseAmount')"
+                                                    (blur)="formatAmount(i, 'debtTotalDecreaseAmount')"
+                                                    (focus)="formatAmountAsNumber(i, 'debtTotalDecreaseAmount', $event)"
+                                                    (keyup)="formatVal(debtDec)"
+                                                    digitOnly
+                                                />
+                                            </mat-form-field>
+                                            <mat-error *ngIf="showLoanValidationMessage('debtTotalDecreaseAmount', i)">
+                                                <strong>{{ 'required' | translate }}</strong>
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="mb-2">
+                                            <mat-label class="label-txt">Broj računa PB</mat-label>
+                                            <mat-form-field class="example-full-width" appearance="outline">
+                                                <input
+                                                    formControlName="previousBankAccount"
+                                                    matInput
+                                                    name="previousBankAccount"
+                                                    (input)="allowOnlyDigitsAndDashes(i, 'previousBankAccount')"
+                                                    (blur)="formatBankAccount(i, 'previousBankAccount'); setBankAccountValidator(i)"
+                                                />
+                                            </mat-form-field>
+                                            <mat-error
+                                                *ngIf="refRequestLoans().controls[i].get('previousBankAccount')?.errors?.['bankAccountInvalid']; else bankAccountError"
+                                            >
+                                                <strong>{{ validationMessageBankAccount | translate }}</strong>
+                                            </mat-error>
+                                            <ng-template #bankAccountError>
+                                                <mat-error *ngIf="showLoanValidationMessage('previousBankAccount', i)">
+                                                    <strong>{{ 'required' | translate }}</strong>
+                                                </mat-error>
+                                            </ng-template>
+                                        </div>
+                                    </div>
+                                    <div class="col col-model">
+                                        <div class="mb-2">
+                                            <mat-label class="label-txt">Model</mat-label>
+                                            <mat-form-field class="example-full-width" appearance="outline">
+                                                <input
+                                                    formControlName="paymentModel"
+                                                    matInput
+                                                    name="paymentModel"
+                                                    maxlength="2"
+                                                    (input)="allowOnlyDigits(i, 'paymentModel')"
+                                                    (blur)="setReferenceNumberValidator(i)"
+                                                />
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="mb-2">
+                                            <mat-label class="label-txt">Poziv na broj</mat-label>
+                                            <mat-form-field class="example-full-width" appearance="outline">
+                                                <input
+                                                    formControlName="paymentReferenceNumber"
+                                                    matInput
+                                                    name="paymentReferenceNumber"
+                                                    (input)="allowOnlyLettersDigitsAndDashes(i, 'paymentReferenceNumber')"
+                                                    (blur)="setReferenceNumberValidator(i)"
+                                                />
+                                            </mat-form-field>
+                                            <mat-error
+                                                *ngIf="refRequestLoans().controls[i].get('paymentReferenceNumber')?.errors?.['referenceNumberInvalid']"
+                                            >
+                                                <strong>{{ validationMessageReferenceNumber | translate }}</strong>
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                </div>
+                            </mat-expansion-panel>
+                            <div class="add-new-panel" *ngIf="isUserBank && isStatusDraft">
+                                <button
+                                    mat-button
+                                    class="add-new-panel add-credit"
+                                    type="button"
+                                    (mousedown)="$event.preventDefault()"
+                                    (click)="addToArray()"
+                                >
+                                    <span class="material-symbols-outlined">add</span>
+                                    <span>Dodaj novi kreditni proizvod</span>
+                                </button>
+                            </div>
+                            <div
+                                *ngIf="isUserBank && isStatusDraft && (!isSubmitted || !isStatusConfirmed || isStatusDebtInfoSubmited)"
+                                class="flex my-3"
+                                [ngClass]="haveCancel ? 'justify-content-between' : 'justify-content-end'"
+                            >
+                                <button
+                                    *ngIf="haveCancel"
+                                    mat-stroked-button
+                                    class="btn-border-red"
+                                    type="button"
+                                    (mousedown)="$event.preventDefault()"
+                                    (click)="cancel()"
+                                >
+                                    Odustani od zahteva
+                                </button>
+                                <div>
+                                    <button mat-stroked-button class="btn-border-blue me-2" type="submit" (click)="createDraft()">
+                                        Snimi zahtev
+                                    </button>
+                                    <button mat-flat-button class="btn-regular-blue" type="submit" (click)="createAndSubmit()">
+                                        Pošalji zahtev
+                                    </button>
+                                </div>
+                            </div>
+                            <div *ngIf="isStatusDebtInfoSubmited" class="flex justify-content-between my-3">
+                                <button
+                                    mat-stroked-button
+                                    class="btn-border-red"
+                                    type="button"
+                                    (mousedown)="$event.preventDefault()"
+                                    (click)="cancel()"
+                                >
+                                    Odustani od zahteva
+                                </button>
+                                <div>
+                                    <button
+                                        mat-stroked-button
+                                        class="btn-border-blue me-2"
+                                        type="button"
+                                        (mousedown)="$event.preventDefault()"
+                                        (click)="openDialog()"
+                                    >
+                                        Potrebno ažuriranje potvrde
+                                    </button>
+                                    <button mat-flat-button class="btn-regular-blue" type="submit" (click)="submitTrans()">
+                                        Realizacija plaćanja
+                                    </button>
+                                </div>
+                            </div>
+                            <div *ngIf="isButtonVisible && isStatusTransSubmited" class="flex justify-content-end my-3">
+                                <button
+                                    mat-stroked-button
+                                    class="btn-border-blue me-2"
+                                    type="button"
+                                    (mousedown)="$event.preventDefault()"
+                                    (click)="openDialog()"
+                                >
+                                    Provera realizacije
+                                </button>
+                                <button mat-flat-button class="btn-regular-blue" type="submit" (click)="confirmTransaction()">
+                                    Potvrđena realizacija
+                                </button>
+                            </div>
+                            <div *ngIf="isButtonVisible && isStatusTransCheckpending" class="flex justify-content-between my-3">
+                                <button
+                                    mat-stroked-button
+                                    class="btn-border-red"
+                                    type="button"
+                                    (mousedown)="$event.preventDefault()"
+                                    (click)="cancel()"
+                                >
+                                    Odustani od zahteva
+                                </button>
+                                <button mat-flat-button class="btn-regular-blue" type="submit" (click)="updateTrans()">
+                                    Potvrda realizacije
+                                </button>
+                            </div>
+                            <div *ngIf="isButtonVisible && isSubmitted" class="flex justify-content-btw my-3">
+                                <div class="abt-btn">
+                                    <button
+                                        mat-stroked-button
+                                        class="btn-border-red"
+                                        type="button"
+                                        (mousedown)="$event.preventDefault()"
+                                        (click)="openDialog()"
+                                    >
+                                        Potrebno pojašnjenje
+                                    </button>
+                                </div>
+                                <div>
+                                    <button mat-stroked-button class="btn-border-blue me-2" type="button" (click)="saveDebtInfo()">
+                                        Snimi odgovor
+                                    </button>
+                                    <button mat-flat-button class="btn-regular-blue" type="submit" (click)="sendDebtInfo()">
+                                        Pošalji zahtev
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div *ngIf="switchButtonMode" class="bggg" (click)="backgroundMenuBtn()"></div>
+                    <mat-expansion-panel expanded="true" togglePosition="before">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title> Dokumenti ({{ refinanceRequestDocuments.length }}) </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div *ngIf="refinanceRequestDocuments.length === 0" class="empty-list">Trenutno nema dokumenata</div>
+                        <div *ngIf="hideMenu">
+                            <div class="upload-doc">
+                                <input
+                                    type="file"
+                                    (click)="resetPreviousFile($event)"
+                                    multiple
+                                    class="hide"
+                                    (change)="selectFiles($event)"
+                                    #fileUpload
+                                    placeholder="Upload file"
+                                />
+                                <a role="button" class="align" (click)="switchDropButton()">
+                                    <span class="material-symbols-outlined">add</span>
+                                    <span>DODAJ</span>
+                                </a>
+                            </div>
+                            <div
+                                *ngIf="switchButtonMode"
+                                class="menu-list"
+                                id="dropdownmenu"
+                                aria-labelledby="dropdownMenuLink"
+                                [ngStyle]="{ right: shiftLeft ? '5px' : '5px' }"
+                            >
+                                <li
+                                    class="dropdown-item"
+                                    *ngFor="let ac of documentActionArray"
+                                    [value]="ac.action"
+                                    (click)="actionFun(ac.action, fileUpload)"
+                                >
+                                    {{
+                                        ac.action == 'REQUEST'
+                                            ? 'Zahtev za refinansiranje'
+                                            : ac.action == 'SUBSIDY_DEBT_INFO'
+                                            ? 'Stanje za subvencionisane kredite'
+                                            : ac.action == 'LETTER_OF_INTENT'
+                                            ? 'Pismo o namerama'
+                                            : ''
+                                    }}
+                                </li>
+                            </div>
+                        </div>
+                        <div *ngIf="refinanceRequestDocuments.length !== 0" formArrayName="documents">
+                            <ng-container *ngFor="let doc of refinanceRequestDocuments; let i = index" [formGroupName]="i">
+                                <div class="doc-list-item">
+                                    <div class="flex">
+                                        <div class="align">
+                                            <span class="material-symbols-outlined">description</span>
+                                        </div>
+                                        <div class="ms-2">
+                                            <div>
+                                                {{
+                                                    doc.documentType == 'REQUEST'
+                                                        ? 'Zahtev za refinansiranje'
+                                                        : doc.documentType == 'SUBSIDY_DEBT_INFO'
+                                                        ? 'Stanje za subvencionisane kredite'
+                                                        : doc.documentType == 'LETTER_OF_INTENT'
+                                                        ? 'Pismo o namerama'
+                                                        : ''
+                                                }}
+                                            </div>
+                                            <div>{{ doc.name }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="flex">
+                                        <div class="align pointer">
+                                            <span class="material-symbols-outlined" download (click)="download(doc)">download</span>
+                                        </div>
+                                        <div class="align pointer" *ngIf="checkForDelete?.includes(doc.documentType)">
+                                            <span class="material-symbols-outlined" (click)="deleteDocs(i)">clear</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </mat-expansion-panel>
+                    <mat-expansion-panel expanded="true" togglePosition="before">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                Komentari ({{ refinanceRequestComments ? refinanceRequestComments.length : '0' }})
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div *ngIf="!refinanceRequestComments; else commentList" class="empty-list">Trenutno nema komentara</div>
+                        <ng-template #commentList>
+                            <ul class="comment-list">
+                                <li class="comment-item flex" *ngFor="let item of refinanceRequestComments">
+                                    <span class="material-symbols-outlined">chat</span>
+                                    <div class="ms-2">
+                                        <div class="title">{{ item.refReason?.name }}</div>
+                                        <div class="desc">{{ item.description }}</div>
+                                        <div class="info">
+                                            <span *ngIf="item.createdByName">{{ item.createdByName }}, </span>
+                                            <span>{{ item.createdDate | date: 'dd.MM.yyyy.' }} {{ item.createdDate | date: 'HH:mm' }}</span>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </ng-template>
+                    </mat-expansion-panel>
+                    <mat-expansion-panel expanded="true" togglePosition="before">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title> Istorijat </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div *ngIf="refinanceRequestHistory.length === 0; else historyList" class="empty-list">Trenutno nema podataka</div>
+                        <ng-template #historyList>
+                            <ul class="history-list">
+                                <li class="history-item ps-2" *ngFor="let item of refinanceRequestHistory">
+                                    <div>{{ item.refAction?.name }}</div>
+                                    <div class="info">
+                                        <span *ngIf="item.createdByName">{{ item.createdByName }}, </span>
+                                        <span>{{ item.updatedDate | date: 'dd.MM.yyyy.' }} {{ item.updatedDate | date: 'HH:mm' }}</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </ng-template>
+                    </mat-expansion-panel>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

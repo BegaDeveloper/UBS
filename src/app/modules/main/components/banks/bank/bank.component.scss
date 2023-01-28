@@ -1,0 +1,40 @@
+/* common add/edit form css */
+
+.form-div {
+    max-width: 500px;
+    margin-top: 20px;
+}
+
+.mat-form-field-appearance-outline {
+    width: 100%;
+}
+
+::ng-deep.mat-form-field-outline {
+    background: #fff;
+    border-radius: 0 5px 5px 0;
+}
+
+.btn-wrapper {
+    margin-top: 50px;
+}
+
+/* bank css */
+
+.domain-field-wrapper {
+    font-size: 14px;
+}
+
+.add-domain-btn-wrapper {
+    margin-top: 5px;
+}
+
+.add-domain-btn {
+    border: 1px #dbdbdb solid;
+    background: #fff;
+    color: #4e8bee;
+    padding: 6px 13px;
+    border-radius: 6px;
+    width: 100%;
+    font-size: 16px;
+}
+

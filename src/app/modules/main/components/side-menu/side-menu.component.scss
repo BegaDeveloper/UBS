@@ -1,0 +1,60 @@
+.pad {
+    padding: 17px;
+}
+
+.pad li {
+    font-size: 14px;
+    color: #7e7e7e;
+    list-style: none;
+    font-weight: 500;
+    padding: 5px 9px;
+    margin-top: 9px;
+    cursor: pointer;
+    transition: all 0.4s;
+    border-radius: 6px;
+}
+
+.pad li:hover {
+    background: #f2f2f2;
+}
+
+.pad a {
+    display:block;
+    text-decoration: none;
+    color: #7e7e7e;
+}
+
+.pad i {
+    margin-right: 10px;
+}
+
+// .sticky {
+//     position: sticky !important;
+//     position: -webkit-sticky !important; /* For macOS/iOS Safari */
+//     top: 50px !important; /* Sets the sticky toolbar to be on top */
+//     z-index: 1000 !important;
+// }
+.menu-item {
+    font-size: 14px;
+    color: #7e7e7e;
+    font-weight: 500;
+    padding: 8px 10px;
+    cursor: pointer;
+    transition: all 0.4s;
+    border-radius: 6px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+
+    .material-symbols-outlined {
+        margin-right: 10px;
+    }
+    
+    &:hover {
+        background: #f2f2f2;
+    }
+}
+.menu-item.active {
+    color: #1d4385;
+    background: #f2f2f2;
+}

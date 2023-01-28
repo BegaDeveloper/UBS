@@ -1,0 +1,7 @@
+{
+  "__comment__": "Use http://localhost:8080/api for local deployment or http://refloan.enetelsolutions.com/ubs/api for Enetel deployment",
+  "production": false,
+  "baseUrl": "http://localhost:8080/api",
+  "webSocketUrl": "ws://localhost:8080/ws/socket",
+  "isTestEnvironment": false
+}

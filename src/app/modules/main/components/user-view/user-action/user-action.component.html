@@ -1,0 +1,132 @@
+<form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+    <div class="back-div">
+        <button type="button" class="back-btn d-flex" (mousedown)="$event.preventDefault()" (click)="goBack()">
+            <span class="material-symbols-outlined">arrow_back</span>
+            <span>&nbsp;&nbsp;Nazad</span>
+        </button>
+    </div>
+    <div class="id-div">
+        <p>{{ title }}</p>
+    </div>
+    <div class="form-div">
+        <!---Activation link--->
+        <div class="field-wrapper">
+            <div *ngIf="id">
+                <p class="activation-txt" [ngStyle]="{ color: singleUser?.active == true ? '#198754' : '#D71717' }">
+                    {{ activeOrNot }}
+                </p>
+                <div *ngIf="singleUser?.active == false">
+                    <button class="btn btn-success" type="button" (click)="sendLink()">Pošalji aktivacioni link</button>
+                </div>
+            </div>
+        </div>
+        <!---Unlock-->
+        <div class="field-wrapper" *ngIf="id">
+            <p [ngStyle]="{ color: singleUser?.locked ? '#D71717' : '#198754' }">
+                <strong>{{ unlockTitle }}</strong>
+            </p>
+            <div *ngIf="singleUser?.locked == true">
+                <button type="button" class="btn btn-success" (click)="unlock()">Otključaj korisnika</button>
+            </div>
+        </div>
+        <!--Email-->
+        <div class="field-wrapper">
+            <div *ngIf="!id">
+                <mat-label class="label-txt">Email</mat-label>
+                <mat-form-field appearance="outline">
+                    <input matInput type="text" formControlName="login" [errorStateMatcher]="matcher" name="login" />
+                </mat-form-field>
+                <mat-error *ngIf="showValidationMessage('login')">
+                    <strong>{{ 'email' | translate }}</strong>
+                </mat-error>
+                <mat-error *ngIf="showValidationMessage('login')">
+                    <strong>{{ 'required' | translate }}</strong>
+                </mat-error>
+            </div>
+            <div *ngIf="id">
+                <mat-label class="label-txt">Email</mat-label>
+                <mat-form-field appearance="outline">
+                    <input matInput type="text" formControlName="login" name="login" readonly />
+                </mat-form-field>
+            </div>
+        </div>
+
+        <!--First name--->
+        <div class="field-wrapper">
+            <mat-label class="label-txt">Ime</mat-label>
+            <mat-form-field appearance="outline">
+                <input matInput type="text" formControlName="firstName" [errorStateMatcher]="matcher" />
+            </mat-form-field>
+            <mat-error *ngIf="showValidationMessage('firstName')">
+                <strong>{{ 'required' | translate }}</strong>
+            </mat-error>
+        </div>
+        <!---Last name--->
+        <div class="field-wrapper">
+            <mat-label class="label-txt">Prezime</mat-label>
+            <mat-form-field appearance="outline">
+                <input matInput type="text" formControlName="lastName" [errorStateMatcher]="matcher" />
+            </mat-form-field>
+            <mat-error *ngIf="showValidationMessage('lastName')">
+                <strong>{{ 'required' | translate }}</strong>
+            </mat-error>
+        </div>
+
+        <div *ngIf="userRole?.includes('SUPERADMIN')">
+            <div *ngIf="!id">
+                <mat-label class="label-txt">Banka</mat-label>
+                <mat-form-field appearance="outline" class="inpt-width">
+                    <mat-select formControlName="bankId" placeholder="Odaberi banku" [disabled]="disableField">
+                        <mat-option *ngFor="let bank of banks" [value]="bank.id">
+                            {{ bank.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-error *ngIf="showValidationMessage('bankId')">
+                    <strong>{{ 'required' | translate }}</strong>
+                </mat-error>
+            </div>
+            <div *ngIf="id" class="user-font">
+                <mat-label class="label-txt">Banka</mat-label>
+                <mat-form-field appearance="outline">
+                    <input matInput type="text" formControlName="bankId" class="hidden-i" readonly />
+                    <input matInput type="text" [value]="singleUser?.bank?.name" readonly />
+                </mat-form-field>
+            </div>
+        </div>
+        <div *ngIf="userRole?.includes('ADMIN')">
+            <mat-label class="label-txt">Banka</mat-label>
+            <mat-form-field appearance="outline">
+                <input matInput type="text" formControlName="bankId" class="hidden-i" readonly />
+                <input matInput type="text" [value]="bankName" readonly />
+            </mat-form-field>
+        </div>
+        <div class="mt-4">
+            <p class="label-txt">Rola:</p>
+            <div formArrayName="roles">
+                <div *ngFor="let roleType of roleTypes; let i = index">
+                    <mat-checkbox
+                        #saveCheckBox
+                        color="primary"
+                        [value]="roleType.role"
+                        [checked]="
+                            isRoleChecked(roleType.role) || (roleType.role !== 'SUPERADMIN' && saveCheckBox.checked)
+                                ? !disableCheckbox
+                                : false
+                        "
+                        (change)="onCheckBoxChange($event, roleType, saveCheckBox.checked)"
+                        [disabled]="disableCheckbox ? roleType.role !== 'SUPERADMIN' : false"
+                    >
+                        {{ roleType.name }}
+                    </mat-checkbox>
+                </div>
+            </div>
+        </div>
+        <div class="field-wrapper mt-4" *ngIf="id">
+            <mat-checkbox color="primary" class="mt-3" formControlName="enabled">Omogućeno logovanje*</mat-checkbox>
+        </div>
+        <div class="btn-wrapper">
+            <button type="submit" class="btn btn-primary">Snimi</button>
+        </div>
+    </div>
+</form>

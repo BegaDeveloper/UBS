@@ -1,0 +1,42 @@
+.login-wrapper {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 1000;
+    background: #1D4283 url('../../../assets/img/login-bg.png') no-repeat right center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-form {
+    width: 640px;
+    background-color: #fff;
+    border-radius: 4px;
+}
+
+.login-logo {
+    max-width: 260px;
+}
+
+.mat-form-field {
+    width: 100%;
+}
+
+.btn-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-btn {
+    padding: 5px 28px;
+}
+
+.forgot-pass {
+    cursor: pointer;
+    color: rgb(32, 159, 243);
+}

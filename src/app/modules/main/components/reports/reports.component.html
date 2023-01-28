@@ -1,0 +1,44 @@
+<form [formGroup]="reportsForm" autocomplete="off" (ngSubmit)="onSubmit()">
+    <div class="id-div">
+        <p>Izveštaji</p>
+    </div>
+    <div class="form-div">
+        <div class="field-wrapper">
+            <label id="pick-report" class="radio-group-label">Izaberi vrstu izveštaja:</label>
+            <mat-radio-group aria-label="pick-report" class="radio-group" formControlName="reportType" (change)="changeRadio($event)">
+                <mat-radio-button value="1" class="radio-btn">Izveštaj o kašnjenju prijema potvrde</mat-radio-button>
+                <mat-radio-button [disabled]="userRole?.includes('SUPERADMIN')" value="2" class="radio-btn"
+                    >Izveštaj o kašnjenju izdavanja potvrde (interno)</mat-radio-button
+                >
+                <mat-radio-button [disabled]="userRole?.includes('SUPERADMIN')" value="3" class="radio-btn"
+                    >Izveštaj analitike zahteva kao Nova banka</mat-radio-button
+                >
+                <mat-radio-button [disabled]="userRole?.includes('SUPERADMIN')" value="4" class="radio-btn"
+                    >Izveštaj analitike zahteva kao Prethodna banka</mat-radio-button
+                >
+            </mat-radio-group>
+        </div>
+        <div class="field-wrapper mt-5">
+            <mat-label>Vremenski interval</mat-label>
+            <mat-form-field appearance="outline">
+                <mat-date-range-input [rangePicker]="campaignOnePicker">
+                    <input matStartDate placeholder="Početni datum" formControlName="startDate" />
+                    <input matEndDate placeholder="Krajnji datum" formControlName="endDate" />
+                </mat-date-range-input>
+                <mat-datepicker-toggle matSuffix [for]="campaignOnePicker"></mat-datepicker-toggle>
+                <mat-date-range-picker #campaignOnePicker></mat-date-range-picker>
+            </mat-form-field>
+            <mat-error *ngIf="showValidationMessage('endDate')">
+                <strong>{{ 'required' | translate }}</strong>
+            </mat-error>
+        </div>
+        <div class="btn-wrapper reports-btn">
+            <div>
+                <button type="submit" class="btn btn-primary" [disabled]="reportBtn">Kreiraj PDF izveštaj</button>
+            </div>
+            <div>
+                <button type="submit" class="btn btn-primary" [disabled]="!reportBtn">Kreiraj Excel izveštaj</button>
+            </div>
+        </div>
+    </div>
+</form>

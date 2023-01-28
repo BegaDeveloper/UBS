@@ -1,0 +1,55 @@
+.sort-btn {
+    border: none;
+    background-color: transparent;
+}
+
+.dots {
+    display: flex;
+}
+
+.dots-menu-btn {
+    font-size: 16px;
+    border-radius: 8px;
+    width: 150px;
+    padding: 5px 7px;
+    border: 1px;
+    background: #fff;
+    display: flex;
+    justify-content: flex-start;
+    transition: all 0.4s;
+}
+
+.dots-menu-btn:hover {
+    background: rgb(196, 196, 196);
+}
+
+// custom column size persentage
+.col-width10 {
+    flex-basis: 10%;
+    flex-grow: 0;
+}
+
+.col-width15 {
+    flex-basis: 15%;
+    flex-grow: 0;
+}
+
+.col-width20 {
+    flex-basis: 20%;
+    flex-grow: 0;
+}
+
+// custom column size px
+.col-action {
+    flex-basis: 50px;
+    flex-grow: 0;
+    justify-content: end;
+}
+
+.col-80 {
+    flex: 0 0 80px;
+}
+
+.col-160 {
+    flex: 0 0 160px;
+}

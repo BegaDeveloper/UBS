@@ -1,0 +1,39 @@
+<div class="container-fluid">
+    <div class="h3 mb-3 main-title">Poruke</div>
+    <div class="mb-3">
+        <div class="row">
+            <div class="col-sm-6 col-lg-4">
+                <mat-form-field appearance="outline" class="max-width">
+                    <input
+                        matInput
+                        placeholder="Pretraži poruke"
+                        appDelayedInput
+                        [value]="search"
+                        [delayTime]="600"
+                        (delayedInput)="setSearch($event)"
+                    />
+                    <mat-icon matSuffix class="material icons">search</mat-icon>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-6 col-lg-8 my-auto">
+                <div class="flex justify-content-end">
+                    <button mat-button class="btn btn-primary" routerLink="/main/add-message">Dodaj poruku</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <app-reusable-table
+        [columns]="column"
+        [columnsClasses]="columnsClasses"
+        [pageIndex]="pageIndex"
+        [rows]="rows"
+        [page]="page"
+        [sortBy]="sortBy"
+        [sortDirection]="sortDirection"
+        (pageIndexEmitter)="getServerData($event)"
+        (sortByEmitter)="toggleSortOptions()"
+        (deleteEmitter)="openDeleteDialog($event)"
+    >
+    </app-reusable-table>
+</div>

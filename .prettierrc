@@ -1,0 +1,11 @@
+# Prettier configuration
+
+printWidth: 140
+singleQuote: true
+tabWidth: 4
+useTabs: false
+arrowParens: avoid
+bracketSpacing: true
+jsxBracketSameLine: false
+semi: true
+trailingComma: all

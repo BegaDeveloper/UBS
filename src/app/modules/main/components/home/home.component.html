@@ -1,0 +1,7 @@
+<div class="side"
+    [ngClass]="{'d-none' : toggleSideBar.getToggleSideBar()}" >
+    <app-side-menu></app-side-menu>
+</div>
+<div class="router p-4" [ngClass]="{'full' : toggleSideBar.getToggleSideBar()}">
+    <router-outlet></router-outlet>
+</div>

@@ -1,0 +1,69 @@
+<form [formGroup]="appForm" (ngSubmit)="onSubmit()">
+    <div class="back-div">
+        <button type="button" class="back-btn d-flex" (mousedown)="$event.preventDefault()" (click)="goBack()">
+            <span class="material-symbols-outlined">arrow_back</span>
+            <span>&nbsp;&nbsp;Nazad</span>
+        </button>
+    </div>
+    <div class="id-div">
+        <p>{{ title }}</p>
+    </div>
+
+    <div class="form-div">
+        <div class="field-wrapper" *ngIf="id">
+            <mat-label class="label-txt">Api Key</mat-label>
+            <mat-form-field appearance="outline">
+                <input matInput [value]="apiKey" readonly />
+            </mat-form-field>
+        </div>
+        <div class="field-wrapper">
+            <mat-label class="label-txt">Ime*</mat-label>
+            <mat-form-field appearance="outline">
+                <input formControlName="name" matInput name="name" />
+            </mat-form-field>
+            <mat-error *ngIf="showValidationMessage('name')">
+                <strong>{{ 'required' | translate }}</strong>
+            </mat-error>
+        </div>
+        <div class="field-wrapper" *ngIf="!id">
+            <mat-label class="label-txt">Banke*</mat-label>
+            <mat-form-field appearance="outline" class="inpt-width">
+                <mat-select formControlName="bankId" placeholder="Odaberi banku" panelClass="loan-mtop" disableOptionCentering>
+                    <mat-option *ngFor="let bank of banks" [value]="bank.id">
+                        {{ bank.name }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-error *ngIf="showValidationMessage('bankId')">
+                <strong>{{ 'required' | translate }}</strong>
+            </mat-error>
+        </div>
+        <div class="field-wrapper" *ngIf="id">
+            <mat-label class="label-txt">Banke*</mat-label>
+            <mat-form-field appearance="outline">
+                <input matInput type="text" formControlName="bankId" class="visibility-n" readonly />
+                <input matInput type="text" [value]="singleApp?.bank?.name" readonly />
+            </mat-form-field>
+        </div>
+        <div class="field-wrapper">
+            <div class="mt-4">
+                <p class="label-txt">Rola:</p>
+                <div formArrayName="roles">
+                    <div *ngFor="let roleType of roleTypes; let i = index">
+                        <mat-checkbox
+                            color="primary"
+                            [value]="roleType.role"
+                            [checked]="id ? isRoleChecked(roleType.role) : false"
+                            (change)="onCheckBoxChange($event)"
+                        >
+                            {{ roleType.name }}
+                        </mat-checkbox>
+                    </div>
+                </div>
+            </div>
+            <div class="btn-wrapper">
+                <button mat-button type="submit" class="btn btn-primary">Sačuvaj</button>
+            </div>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,65 @@
+<div class="login-wrapper">
+    <form *ngIf="isPasswordChange || isKeyValid; else linkExpired" [formGroup]="newForm" (ngSubmit)="onSubmit()" class="login-form p-5">
+        <h3 class="form-title">{{ title }}</h3>
+        <div *ngIf="isPasswordChange" class="field-wrapper">
+            <mat-label>Stara lozinka</mat-label>
+            <mat-form-field appearance="outline">
+                <input
+                    matInput
+                    formControlName="oldPassword"
+                    [type]="isPasswordVisible[0] ? 'text' : 'password'"
+                    placeholder="Stara lozinka"
+                    name="oldPassword" />
+                    <mat-icon matSuffix class="material-symbols-outlined pointer" (mousedown)="$event.preventDefault()" (click)="togglePasswordVisibility(0)">
+                        {{ isPasswordVisible[0] ? 'visibility' : 'visibility_off' }}
+                    </mat-icon>
+            </mat-form-field>
+            <mat-error *ngIf="showValidationMessage('oldPassword')">
+                <strong>{{ 'required' | translate }}</strong>
+            </mat-error>
+        </div>
+        <div class="field-wrapper">
+            <mat-label>Lozinka</mat-label>
+            <mat-form-field appearance="outline">
+                <input
+                    matInput
+                    formControlName="password"
+                    [type]="isPasswordVisible[1] ? 'text' : 'password'"
+                    placeholder="Lozinka"
+                    name="password" />
+                    <mat-icon matSuffix class="material-symbols-outlined pointer" (mousedown)="$event.preventDefault()" (click)="togglePasswordVisibility(1)">
+                        {{ isPasswordVisible[1] ? 'visibility' : 'visibility_off' }}
+                    </mat-icon>
+            </mat-form-field>
+            <mat-error *ngIf="showValidationMessage('password')">
+                <strong>{{ 'password' | translate }}</strong>
+            </mat-error>
+        </div>
+        <div class="field-wrapper">
+            <mat-label>Potvrda lozinke</mat-label>
+            <mat-form-field appearance="outline">
+                <input
+                    matInput
+                    formControlName="repeatedPassword"
+                    [type]="isPasswordVisible[2] ? 'text' : 'password'"
+                    placeholder="Potvrda lozinke"
+                    name="repeatedPassword"
+                />
+                <mat-icon matSuffix class="material-symbols-outlined pointer" (mousedown)="$event.preventDefault()" (click)="togglePasswordVisibility(2)">
+                    {{ isPasswordVisible[2] ? 'visibility' : 'visibility_off' }}
+                </mat-icon>
+            </mat-form-field>
+            <mat-error *ngIf="showValidationMessage('repeatedPassword')">
+                <strong>{{ 'password' | translate }}</strong>
+            </mat-error>
+        </div>
+        <button type="submit" class="btn btn-primary mt-4 login-btn">{{ btnText }}</button>
+    </form>
+    <ng-template #linkExpired>
+        <mat-card class="p-5">
+            <h2 *ngIf="isUserActivation">Aktivacioni link je istekao!</h2>
+            <h2 *ngIf="isPasswordReset">Link zahteva je istekao!</h2>
+        </mat-card>
+    </ng-template>
+</div>
+

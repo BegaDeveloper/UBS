@@ -1,0 +1,7 @@
+{
+  "__comment__": "Use http://localhost:8080/api for local deployment or http://refloan.enetelsolutions.com/ubs/api for Enetel deployment",
+  "production": true,
+  "baseUrl": "https://rkdb.ubs-asb.com:5443/ubs/api",
+  "webSocketUrl": "wss://rkdb.ubs-asb.com:5443/ubs/ws/socket",
+  "isTestEnvironment": true
+}

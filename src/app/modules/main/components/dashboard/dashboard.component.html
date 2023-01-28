@@ -1,0 +1,73 @@
+<div class="container-fluid">
+    <div *ngIf="dashboardItems && dashboardItems.length; else welcome">
+        <div class="h5">
+            Nova Banka
+        </div>
+
+        <div class="row">
+            <div class="col-md-3" *ngFor="let item of newBankRefActions">
+                <div class="mb-5">
+                    <mat-card class="mat-card-dashboard mat-card-dashboard-dark" (click)="onCardClick(item)">
+                        <div class="icon">
+                            <span class="material-symbols-outlined">
+                            layers
+                            </span>
+                        </div>
+                        <p>{{ item.refStatus.name }}</p>
+                        <div class="h1 ms-1">{{ item.count }}</div>
+                    </mat-card>
+                </div>
+            </div>
+            <div class="col-md-3" *ngFor="let item of newBankRefPending">
+                <div class="mb-5">
+                    <mat-card class="mat-card-dashboard mat-card-pendign mat-card-pendign-dark" (click)="onCardClick(item)">
+                        <div class="icon">
+                            <span class="material-symbols-outlined">
+                            notifications
+                            </span>
+                        </div>
+                        <p>{{ item.refStatus.name }}</p>
+                        <div class="h1 ms-1">{{ item.count }}</div>
+                    </mat-card>
+                </div>
+            </div>
+        </div>
+
+        <div class="h5">
+            Prethodna Banka
+        </div>
+
+        <div class="row">
+            <div class="col-md-3" *ngFor="let item of previousBankRefActions">
+                <div class="mb-5">
+                   <mat-card class="mat-card-dashboard mat-card-dashboard-dark" (click)="onCardClick(item)">
+                       <div class="icon">
+                           <span class="material-symbols-outlined">
+                            layers
+                            </span>
+                       </div>
+                       <p>{{ item.refStatus.name }}</p>
+                       <div class="h1 ms-1">{{ item.count }}</div>
+                   </mat-card>
+                </div>
+            </div>
+            <div class="col-md-3" *ngFor="let item of previousBankRefPending">
+                <div class="mb-5">
+                    <mat-card class="mat-card-dashboard mat-card-pendign mat-card-pendign-dark" (click)="onCardClick(item)">
+                        <div class="icon">
+                            <span class="material-symbols-outlined">
+                            notifications
+                            </span>
+                        </div>
+                        <p>{{ item.refStatus.name }}</p>
+                        <div class="h1 ms-1">{{ item.count }}</div>
+                    </mat-card>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <ng-template #welcome>
+        <h1>Dobrodošli</h1>
+    </ng-template>
+</div>

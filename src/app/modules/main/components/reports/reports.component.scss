@@ -1,0 +1,20 @@
+@import url(../banks/bank/bank.component.scss);
+
+.radio-group-label {
+    font-size: 16px;
+}
+
+.radio-group {
+    display: flex;
+    flex-direction: column;
+    margin: 15px 0;
+}
+
+.reports-btn{
+    display: flex;
+    justify-content: space-between;
+}
+
+::ng-deep.mat-radio-label-content {
+    font-size: 14px;
+}

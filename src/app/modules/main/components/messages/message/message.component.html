@@ -1,0 +1,95 @@
+<form [formGroup]="messageForm" autocomplete="off" (ngSubmit)="onSubmit()">
+    <div class="back-div">
+        <button type="button" class="back-btn d-flex" (mousedown)="$event.preventDefault()" (click)="goBack()">
+            <span class="material-symbols-outlined">arrow_back</span>
+            <span>&nbsp;&nbsp;Nazad</span>
+        </button>
+    </div>
+    <div class="id-div">
+        <p>{{ title }}</p>
+    </div>
+    <div class="form-div">
+        <div class="field-wrapper">
+            <mat-label class="label-txt">Kod*</mat-label>
+            <mat-form-field appearance="outline">
+                <input matInput formControlName="code" name="kod" />
+            </mat-form-field>
+            <mat-error *ngIf="showValidationMessage('code')">
+                <strong>{{ 'required' | translate }}</strong>
+            </mat-error>
+        </div>
+        <div class="field-wrapper">
+            <mat-label class="label-txt">Naslov poruke*</mat-label>
+            <mat-form-field appearance="outline">
+                <input matInput formControlName="subject" name="subject" />
+            </mat-form-field>
+            <mat-error *ngIf="showValidationMessage('subject')">
+                <strong>{{ 'required' | translate }}</strong>
+            </mat-error>
+        </div>
+
+        <div class="field-wrapper text-div">
+            <mat-label class="label-txt mb-2">Poruka*</mat-label>
+
+            <angular-editor [config]="config" formControlName="body" name="body" class="kolkov"></angular-editor>
+            <mat-error *ngIf="showValidationMessage('body')">
+                <strong>{{ 'required' | translate }}</strong>
+            </mat-error>
+        </div>
+        <div formArrayName="actions">
+            <mat-label class="label-txt mb-3 mt-2">Akcije</mat-label>
+            <div class="actionFlex" *ngFor="let newAction of getAction().controls; index as i" [formGroupName]="i">
+                <div class="action-div-first">
+                    <mat-form-field appearance="outline">
+                        <mat-select formControlName="code" placeholder="Akcija">
+                            <mat-option *ngFor="let action of actionData" [value]="action.code">
+                                <div class="checkboxes">
+                                    <div>
+                                        {{ action.name }}
+                                    </div>
+                                </div>
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field class="channel-pick" appearance="outline">
+                        <div class="checkbox-val">
+                            <mat-select placeholder="Kanal" formControlName="notificationChannel">
+                                <mat-option *ngFor="let ch of notificationChannels" [value]="ch.channel">
+                                    {{ ch.channel }}
+                                </mat-option>
+                            </mat-select>
+                        </div>
+                    </mat-form-field>
+                </div>
+                <!---Delete-->
+                <div class="delete-div">
+                    <button mat-icon-button>
+                        <span class="material-symbols-outlined" (click)="removeAction(i)">delete</span>
+                    </button>
+                </div>
+            </div>
+            <mat-error *ngIf="showValidationMessage('actions')">
+                <strong>{{ 'required' | translate }}</strong>
+            </mat-error>
+        </div>
+
+        <hr />
+        <div class="field-wrapper">
+            <div class="add-new-panel">
+                <button
+                    mat-button
+                    class="add-new-panel add-credit"
+                    type="button"
+                    (mousedown)="$event.preventDefault()"
+                    (click)="addActionsToArray()"
+                >
+                    <span class="material-symbols-outlined">add</span>
+                    <span>NOVA AKCIJA</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="btn-wrapper">
+        <button type="submit" class="save btn btn-primary">Snimi</button>
+    </div>
+</form>

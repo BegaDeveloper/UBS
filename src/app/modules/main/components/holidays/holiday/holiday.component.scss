@@ -1,0 +1,13 @@
+@import url(../../banks/bank/bank.component.scss);
+
+.fields-wrapper {
+    display: flex;
+}
+
+.small-field-wrapper {
+    width: 25%;
+    padding-right: 10px;
+}
+.small-field-wrapper:last-child {
+    padding-right: 0;
+}

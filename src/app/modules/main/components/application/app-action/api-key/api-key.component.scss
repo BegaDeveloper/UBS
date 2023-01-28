@@ -1,0 +1,39 @@
+.align {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+
+.key-title {
+    background: #97d4ff;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px #0084ff solid;
+}
+
+.modal-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.apikey {
+    padding: 7px;
+    border-radius: 6px;
+    background: #dbdbdb;
+}
+
+.name {
+    padding: 7px;
+    border-radius: 6px;
+    background: #dbdbdb;
+    font-size: 19px;
+}
+
+.close-dialog {
+    display: flex;
+    justify-content: flex-end;
+}
+
+::ng-deep .mat-dialog-container {
+    overflow-x: hidden;
+}

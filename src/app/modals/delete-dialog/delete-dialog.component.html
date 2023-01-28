@@ -1,0 +1,8 @@
+<h2 mat-dialog-title>Izbriši</h2>
+<mat-dialog-content class="mat-typography">
+    <div>Da li ste sigurni da želite da obrišete ovaj podatak?</div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button type="button" mat-button mat-dialog-close>Odustani</button>
+    <button type="button" class="btn-regular-red" mat-button mat-dialog-close (click)="deleteRow()">Potvrdi</button>
+</mat-dialog-actions>

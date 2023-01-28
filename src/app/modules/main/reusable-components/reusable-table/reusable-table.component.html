@@ -1,0 +1,47 @@
+<mat-table [dataSource]="columns?.content" class="mat-elevation-z8 demo-table">
+  <ng-container *ngFor="let row of rows; let i = index">
+    <ng-container [matColumnDef]="row">
+        <div *ngIf="row !== 'action'">
+          <mat-header-cell *matHeaderCellDef [ngClass]="columnsClasses[i]">
+            {{ row | translate }}
+            <button class="sort-btn" (click)="emitSortBy(row)">
+              <img src="/assets/svg/{{getIconClass(row)}}" alt="sort" [ngStyle]="{ width: '16px', height: '16px' }">
+            </button>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let col"
+            [ngClass]="columnsClasses[i]"
+            [innerHTML]="col[row]"
+            (click)="emitId(col.id)"></mat-cell>
+        </div>
+        <div *ngIf="row === 'action'">
+          <mat-header-cell *matHeaderCellDef [ngClass]="columnsClasses[i]"></mat-header-cell>
+          <mat-cell *matCellDef="let action" [ngClass]="columnsClasses[i]">
+              <div class="dots" type="button" [matMenuTriggerFor]="menu">
+                <span class="material-symbols-outlined">more_vert</span>
+              </div>
+              <mat-menu #menu="matMenu">
+                <button class="dots-menu-btn menu" (click)="onChangeClick(action.id)">
+                  <span class="material-symbols-outlined">edit</span>
+                  <span>&nbsp;&nbsp;&nbsp;Izmeni</span>
+                </button>
+                <button *ngIf="deleteRowOption" class="dots-menu-btn menu" data-toggle="modal" (click)="onDeleteClick(action.id)">
+                  <span class="material-symbols-outlined">delete</span>
+                  <span>&nbsp;&nbsp;&nbsp;Izbriši</span>
+                </button>
+              </mat-menu>
+          </mat-cell>
+        </div>
+    </ng-container>
+  </ng-container>
+  <mat-header-row *matHeaderRowDef="rows"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: rows;" [ngClass]="isRefinanceLoan ? 'refinance-row pointer': ''"></mat-row>
+</mat-table>
+<mat-paginator
+  [length]="totalElements"
+  [pageSize]="pageSize"
+  (page)="sendPageIndex($event)"
+  [hidePageSize]="true"
+  [showFirstLastButtons]="true"
+  [pageIndex]="pageIndex"
+>
+</mat-paginator>

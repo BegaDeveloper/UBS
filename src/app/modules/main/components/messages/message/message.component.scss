@@ -1,0 +1,127 @@
+@import url(../../banks/bank/bank.component.scss);
+
+.message-field {
+    height: 150px;
+    resize: both;
+    border: 1px #e0e0e0 solid;
+    border-radius: 4px;
+    background: white;
+    padding: 10px 12px;
+    width: 500px;
+}
+
+.opt {
+    display: flex;
+    p {
+        margin: 0;
+    }
+}
+
+.checkboxes {
+    margin: 0 auto;
+}
+
+.add-domain-btn-wrapper {
+    margin-top: 5px;
+}
+
+.add-credit {
+    margin-top: 10px;
+    color: #0084ff;
+    font-size: 15px;
+    text-transform: uppercase;
+}
+
+.cursor-inpt {
+    cursor: default;
+}
+
+.flx {
+    display: flex;
+}
+
+.actionFlex {
+    display: flex;
+    .action-div-first {
+        width: 100%;
+        display: flex;
+    }
+}
+
+::ng-deep .ck.ck-editor__main > .ck-editor__editable:not(.ck-focused) {
+    min-height: 165px !important;
+}
+
+.channel-pick {
+    width: 30%;
+    margin-left: 10px;
+}
+
+.checkbox-values {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.add-domain-btn {
+    border: 1px #dbdbdb solid;
+    background: #fff;
+    color: #4e8bee;
+    padding: 6px 13px;
+    border-radius: 6px;
+    width: 100%;
+    font-size: 16px;
+}
+
+.checkboxes {
+    display: flex;
+}
+
+.delete-div {
+    display: flex;
+    align-items: center;
+}
+
+/*.checkbox-val ::ng-deep .mat-select-arrow {
+    border: none;
+}*/
+
+/*.checkbox-val {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    height: 45px;
+    margin-top: -25px;
+}*/
+
+.app {
+    margin-right: 20px;
+}
+
+.add-new-panel {
+    display: flex;
+    justify-content: center;
+    width: auto;
+}
+
+::ng-deep .angular-editor-textarea {
+    background: #ffffff !important;
+    resize: both !important;
+}
+
+::ng-deep .angular-editor-toolbar {
+    input[type='color']:not(.color-picker) {
+        display: initial !important;
+        position: absolute;
+        visibility: hidden;
+        border: none;
+        margin: 0;
+        padding: 0;
+        height: 0;
+        width: 0;
+    }
+}
+
+::ng-deep .select-custom-style {
+    display: none !important;
+}

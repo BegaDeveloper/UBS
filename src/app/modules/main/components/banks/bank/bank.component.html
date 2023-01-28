@@ -1,0 +1,97 @@
+<form [formGroup]="bankForm" autocomplete="off" (ngSubmit)="onSubmit()">
+    <div class="back-div">
+        <button type="button" class="back-btn d-flex" (mousedown)="$event.preventDefault()" (click)="goBack()">
+            <span class="material-symbols-outlined">arrow_back</span>
+            <span>&nbsp;&nbsp;Nazad</span>
+        </button>
+    </div>
+    <div class="id-div">
+        <p>{{ title }}</p>
+    </div>
+    <div class="form-div">
+        <div class="field-wrapper">
+            <mat-label class="label-txt">Kod*</mat-label>
+            <mat-form-field appearance="outline">
+                <input formControlName="code" matInput name="code" />
+            </mat-form-field>
+            <mat-error *ngIf="showValidationMessage('code')">
+                <strong>{{ 'required' | translate }}</strong>
+            </mat-error>
+        </div>
+        <div class="field-wrapper">
+            <mat-label class="label-txt">Skraćeno poslovno ime*</mat-label>
+            <mat-form-field appearance="outline">
+                <input formControlName="shortName" matInput name="shortName" />
+            </mat-form-field>
+            <mat-error *ngIf="showValidationMessage('shortName')">
+                <strong>{{ 'required' | translate }}</strong>
+            </mat-error>
+        </div>
+        <div class="field-wrapper">
+            <mat-label class="label-txt">Poslovno ime*</mat-label>
+            <mat-form-field appearance="outline">
+                <textarea formControlName="name" matInput name="name"></textarea>
+            </mat-form-field>
+            <mat-error *ngIf="showValidationMessage('name')">
+                <strong>{{ 'required' | translate }}</strong>
+            </mat-error>
+        </div>
+        <div class="field-wrapper">
+            <mat-label class="label-txt">Email za obaveštenje</mat-label>
+            <mat-form-field appearance="outline">
+                <input formControlName="notificationMail" matInput name="notificationMail" />
+            </mat-form-field>
+            <mat-error *ngIf="showValidationMessage('notificationMail')">
+                <strong>{{ 'email' | translate }}</strong>
+            </mat-error>
+        </div>
+        <div class="field-wrapper">
+            <mat-label class="label-txt">Email za prigovor</mat-label>
+            <mat-form-field appearance="outline">
+                <input formControlName="complainsMail" matInput name="complainsMail" />
+            </mat-form-field>
+            <mat-error *ngIf="showValidationMessage('complainsMail')">
+                <strong>{{ 'email' | translate }}</strong>
+            </mat-error>
+        </div>
+        <div class="field-wrapper">
+            <mat-label class="label-txt">Url za prigovor</mat-label>
+            <mat-form-field appearance="outline">
+                <input formControlName="complainsUrl" matInput name="complainsUrl" />
+            </mat-form-field>
+            <mat-error *ngIf="showValidationMessage('complainsUrl')">
+                <strong>{{ 'url' | translate }}</strong>
+            </mat-error>
+        </div>
+        <div *ngIf="userRole?.includes('SUPERADMIN')" class="field-wrapper">
+                <mat-label class="label-txt">Email domeni banke</mat-label>
+                <div formArrayName="bankEmailDomains">
+                    <div *ngFor="let domain of getDomain().controls; index as i">
+                        <div class="domain-field-wrapper">
+                            <mat-form-field appearance="outline">
+                                <input formControlName="{{ i }}" matInput name="domainMail" placeholder="Novi domen..." />
+                                <mat-icon matSuffix>
+                                    <span class="material-symbols-outlined pointer" (click)="removeLoan(i)">delete</span>
+                                </mat-icon>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+                <mat-error *ngIf="showValidationMessage('bankEmailDomains')">
+                    <strong>{{ 'domain' | translate }}</strong>
+                </mat-error>
+                <div class="add-domain-btn-wrapper">
+                    <button type="button" class="add-domain-btn align" (click)="addDomainsToArray()">
+                        <span class="material-symbols-outlined">add</span>
+                        <span>NOVI DOMEN</span>
+                    </button>
+                </div>
+        </div>
+        <div class="field-wrapper">
+            <mat-checkbox formControlName="active" name="active" color="primary">Banka je akivna </mat-checkbox>
+        </div>
+        <div class="btn-wrapper">
+            <button type="submit" class="btn btn-primary">Snimi</button>
+        </div>
+    </div>
+</form>

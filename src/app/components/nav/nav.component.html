@@ -1,0 +1,77 @@
+<!---Navigation bar--->
+<nav class="navbar fixed-top py-0 px-3">
+    <div class="text-white pointer d-flex align-items-center">
+        <span class="material-symbols-outlined text-white pointer me-4" *ngIf="userInfo$ | async" (click)="toggleSideBar()"> menu </span>
+        <div (click)="goToDashboard()">
+            <div>Удружење банака Србије п.у.</div>
+            <div>Association of Serbian Banks b.a.</div>
+        </div>
+    </div>
+    <h1 *ngIf="isTestingEnvironment" class="testEnvironment">Testno Okruženje</h1>
+    <div class="d-flex align-items-center" *ngIf="userInfo$ | async as userInfo">
+        <div
+            [ngClass]="{ disabled: reqBody?.length == 0 }"
+            class="toolbar-action notifiction-div"
+            [matMenuTriggerFor]="notification"
+            (click)="getNotificationItems()"
+        >
+            <div class="noti">
+                <mat-icon [matBadge]="mainBodyConnect" [matBadgeHidden]="mainBodyConnect == 0" matBadgeColor="warn">notifications</mat-icon>
+            </div>
+            <mat-menu #notification="matMenu" class="customize-menu menu-without-scroll">
+                <div *ngFor="let msg of reqBody; let i = index">
+                    <div class="search">
+                        <div class="flex-menu">
+                            <div class="align-dot" *ngIf="msg.read == false">
+                                <span class="material-symbols-outlined new-not"> radio_button_unchecked </span>
+                            </div>
+                            <div class="btn-w">
+                                <p
+                                    [ngStyle]="{ 'padding-left': msg?.read !== false ? '15px' : '0' }"
+                                    class="btn-notification"
+                                    [innerHTML]="msg?.message"
+                                ></p>
+                            </div>
+                        </div>
+                        <div class="date-notification-div">
+                            <p [ngStyle]="{ margin: msg.read !== false ? '0 0 0 15px' : '0 0 0 27px' }">
+                                {{ msg?.createdDate | date: 'dd.MM.yyyy.' }} {{ msg.createdDate | date: 'HH:mm' }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </mat-menu>
+        </div>
+        <div class="toolbar-action" hidden>
+            <span class="material-symbols-outlined text-white">settings</span>
+        </div>
+        <div class="login-user ms-4">
+            <div class="text-white pointer text-end align" [matMenuTriggerFor]="menu">
+                <span>{{ userInfo.firstName + ' ' + userInfo.lastName + ' ' }}</span>
+                <span class="material-symbols-outlined">arrow_drop_down</span>
+            </div>
+            <div class="bank-name text-white text-end" *ngIf="userInfo.bank?.shortName">{{ userInfo.bank.shortName }}</div>
+            <mat-menu #menu="matMenu">
+                <div class="menu flex-col">
+                    <button
+                        mat-button
+                        class="sub btn-menu"
+                        routerLink="subscribe"
+                        *ngIf="role?.includes('OPERATOR_NEW' || 'OPERATOR_PREV')"
+                    >
+                        <span class="material-symbols-outlined">settings</span>
+                        <span>&nbsp;&nbsp;Podešavanje notifikacija</span>
+                    </button>
+                    <button mat-button routerLink="/change-password" class="btn-menu">
+                        <span class="material-symbols-outlined">key</span>
+                        <span>&nbsp;&nbsp;Promena lozinke</span>
+                    </button>
+                    <button (click)="openDialog()" mat-button class="btn-menu">
+                        <span class="material-symbols-outlined">logout</span>
+                        <span>&nbsp;&nbsp;Odjava</span>
+                    </button>
+                </div>
+            </mat-menu>
+        </div>
+    </div>
+</nav>

@@ -1,0 +1,32 @@
+<div>
+    <h2 mat-dialog-title>{{ title }}</h2>
+    <div class="key-title align">
+        <span class="material-symbols-outlined">info</span>
+        <span>&nbsp;&nbsp;Kopiraj i sačuvaj kod!</span>
+    </div>
+    <hr />
+        <div class="modal-column">
+            <div class="mb-4 search">
+                <p class="m-0"><strong>Ime:</strong></p>
+                <p class="name mb-0">{{ name }}</p>
+            </div>
+            <div class="mb-4 search">
+                <p class="m-0"><strong> Api key:</strong></p>
+                <div class="apikey mb-0 align">
+                    <span (click)="copyApiKey()" class="material-symbols-outlined pointer">content_copy</span>
+                    <span>&nbsp;&nbsp;{{ apiKey }}</span>
+                </div>
+            </div>
+            <div class="mb-4 search">
+                <p class="m-0"><strong> Private key:</strong></p>
+                <div class="apikey mb-0 align">
+                    <span (click)="copyPrivateKey()" class="material-symbols-outlined pointer">content_copy</span>
+                    <span>&nbsp;&nbsp;{{ privateKey | truncate: [55, '...'] }}</span>
+                </div>
+            </div>
+        </div>
+    <hr />
+    <div class="close-dialog">
+        <div class="btn btn-primary" (click)="goBack()">Zatvori</div>
+    </div>
+</div>

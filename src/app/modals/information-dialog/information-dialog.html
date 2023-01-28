@@ -1,0 +1,27 @@
+<form [formGroup]="formGroup" (ngSubmit)="sendRequest()">
+  <div class="field-wrapper">
+    <mat-label class="label-txt">Kod greške*</mat-label>
+    <mat-form-field appearance="outline" class="max-width">
+      <mat-select formControlName="reasonCode" name="debtorType" placeholder="Odaberi razlog">
+        <mat-option *ngFor="let reason of reasonList" [value]="reason.code">
+          {{ reason.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="field-wrapper">
+    <mat-label class="label-txt">Detaljan opis*</mat-label>
+    <mat-form-field class="max-width" appearance="outline">
+      <textarea
+        formControlName="description"
+        matInput
+        name="description"
+        placeholder="Detaljni opis"
+        appDelayedInput></textarea>
+    </mat-form-field>
+  </div>
+  <div class="btn-wrapper">
+    <button type="button" class="btn btn-danger" (mousedown)="$event.preventDefault()" (click)="onCloseClick()">Odustani</button>
+    <button type="submit" class="btn btn-primary">Pošalji</button>
+  </div>
+</form>

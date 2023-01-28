@@ -1,0 +1,63 @@
+<form [formGroup]="holidayForm" (ngSubmit)="onSubmit()">
+    <div class="back-div">
+        <button type="button" class="back-btn d-flex" (mousedown)="$event.preventDefault()" (click)="goBack()">
+            <span class="material-symbols-outlined">arrow_back</span>
+            <span>&nbsp;&nbsp;Nazad</span>
+        </button>
+    </div>
+    <div class="id-div">
+        <p>{{ title }}</p>
+    </div>
+    <div class="form-div">
+        <div class="field-wrapper">
+            <mat-label class="label-txt">Ime praznika*</mat-label>
+            <mat-form-field appearance="outline">
+                <input matInput formControlName="name" />
+            </mat-form-field>
+            <mat-error *ngIf="showValidationMessage('name')" name="name">
+                <strong>{{ 'required' | translate }}</strong>
+            </mat-error>
+        </div>
+        <div class="fields-wrapper">
+            <div class="small-field-wrapper">
+                <mat-label class="label-txt">Dan*</mat-label>
+                <mat-form-field appearance="outline">
+                    <input matInput type="number" placeholder="dd" formControlName="day" name="day" />
+                </mat-form-field>
+                <mat-error *ngIf="showValidationMessage('day')">
+                    <strong>{{ 'required' | translate }}</strong>
+                </mat-error>
+            </div>
+            <div class="small-field-wrapper">
+                <mat-label class="label-txt">Mesec*</mat-label>
+                <mat-form-field appearance="outline">
+                    <input matInput type="number" placeholder="mm" formControlName="month" name="month" />
+                </mat-form-field>
+                <mat-error *ngIf="showValidationMessage('month')">
+                    <strong>{{ 'required' | translate }}</strong>
+                </mat-error>
+            </div>
+            <div class="small-field-wrapper">
+                <mat-label class="label-txt">Početna godina*</mat-label>
+                <mat-form-field appearance="outline">
+                    <input matInput type="number" placeholder="yyyy" formControlName="startYear" name="startYear" />
+                </mat-form-field>
+                <mat-error *ngIf="showValidationMessage('startYear')">
+                    <strong>{{ 'required' | translate }}</strong>
+                </mat-error>
+            </div>
+            <div class="small-field-wrapper">
+                <mat-label class="label-txt">Krajnja godina*</mat-label>
+                <mat-form-field appearance="outline">
+                    <input matInput type="number" placeholder="yyyy" formControlName="endYear" name="endYear" />
+                </mat-form-field>
+                <mat-error *ngIf="showValidationMessage('endYear')">
+                    <strong>{{ 'required' | translate }}</strong>
+                </mat-error>
+            </div>
+        </div>
+        <div class="btn-wrapper">
+            <button type="submit" class="save btn btn-primary">Snimi</button>
+        </div>
+    </div>
+</form>

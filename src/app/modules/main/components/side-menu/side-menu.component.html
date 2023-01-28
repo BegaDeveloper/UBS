@@ -1,0 +1,13 @@
+<div class="p-3">
+  <a class="menu-item"
+     *ngFor="let mn of menuItems; let i = index"
+     [routerLink]="mn.path"
+     routerLinkActive="active">
+      <span class="material-symbols-outlined">
+          {{ mn.imageClass }}
+      </span>
+      <span>
+        {{ mn.name }}
+      </span>
+  </a>
+</div>

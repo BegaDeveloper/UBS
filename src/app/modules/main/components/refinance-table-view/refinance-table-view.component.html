@@ -1,0 +1,96 @@
+<div class="container-fluid">
+    <div class="h3 mb-3 main-title">Zahtevi</div>
+
+    <div class="mb-2" [formGroup]="formGroup">
+        <div class="row g-2" >
+            <div class="col-2">
+                <mat-label>Pretraži kredite</mat-label>
+                    <mat-form-field appearance="outline" class="max-width">
+                    <input
+                        formControlName="search"
+                        matInput
+                        placeholder="Pretraži kredite"
+                        appDelayedInput
+                        [value]="search"
+                        [delayTime]="600"
+                        (delayedInput)="setSearch($event)"/>
+                    <mat-icon matSuffix class="material icons">search</mat-icon>
+                </mat-form-field>
+            </div>
+            <div class="col">
+                <mat-label>Status</mat-label>
+                <mat-form-field appearance="outline" class="max-width">
+                    <mat-select (selectionChange)="setStatusSearch($event)" #select formControlName="statuses" name="statuses" multiple placeholder="Odaberi status" disableOptionCentering>
+                        <div class="select-statuses-wrapper">
+                            <div class="select-statuses">
+                                <mat-checkbox color="accent"
+                                    [(ngModel)]="openStatusesSelected"
+                                    [ngModelOptions]="{standalone: true}"
+                                    (change)="toggleOpenStatusesSelection()">Otvoreni statusi</mat-checkbox>
+                            </div>
+                            <div class="select-statuses">
+                                <mat-checkbox color="accent"
+                                    [(ngModel)]="allStatusesSelected"
+                                    [ngModelOptions]="{standalone: true}"
+                                    (change)="toggleAllStatusesSelection()">Svi statusi</mat-checkbox>
+                            </div>
+                        </div>
+                        <mat-option (click)="onStatusOptionClick()" *ngFor="let status of statusesList" [value]="status.code">
+                            {{status.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-2">
+                <mat-label>Tip korisnika</mat-label>
+                <mat-form-field appearance="outline" class="max-width">
+                    <mat-select (selectionChange)="setDebtorTypeSearch($event)" formControlName="debtorTypes" name="debtorTypes" multiple placeholder="Odaberi tip korisnika" disableOptionCentering>
+                        <mat-option *ngFor="let debtorType of debtorTypesList" [value]="debtorType.code">
+                            {{debtorType.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-2">
+                <mat-label>Vremenski interval</mat-label>
+                <mat-form-field class="d-flex flex-column me-auto" appearance="outline">
+                    <mat-date-range-input [rangePicker]="campaignOnePicker">
+                        <input matStartDate placeholder="Početni" formControlName="startDate" (dateChange)="setStartDate()">
+                        <input matEndDate placeholder="Krajnji datum" formControlName="endDate" (dateChange)="setEndDate()">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="campaignOnePicker" (click)="clearDate()"></mat-datepicker-toggle>
+                    <mat-date-range-picker #campaignOnePicker></mat-date-range-picker>
+                </mat-form-field>
+            </div>
+            <div class="col" style="flex: 0 0 270px;">
+                <mat-label>Banke</mat-label>
+                <div class="d-flex align-items-center">
+                    <div class="d-flex flex-column me-auto">
+                        <mat-checkbox color="primary" formControlName="newBank" (change)="newBankChange()">
+                            Nova banka
+                        </mat-checkbox>
+                        <mat-checkbox color="primary" formControlName="prevBank" (change)="prevBankChange()">
+                            Prethodna banka
+                        </mat-checkbox>
+                    </div>
+                    <button mat-button class="btn btn-primary ms-2" routerLink="/main/requests">Dodaj zahtev</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <app-reusable-table
+        [columns]="column"
+        [columnsClasses]="columnsClasses"
+        [pageIndex]="pageIndex"
+        [rows]="rows"
+        [totalElements]="totalElements"
+        [page]="page"
+        [sortBy]="sortBy"
+        [sortDirection]="sortDirection"
+        [isRefinanceLoan]="true"
+        (idEmitter)="openRequestForm($event)"
+        (pageIndexEmitter)="getServerData($event)"
+        (sortByEmitter)="toggleSortOptions()">
+    </app-reusable-table>
+</div>
